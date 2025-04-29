@@ -1,0 +1,61 @@
+CREATE DATABASE botica_nova_salud;
+
+USE botica_nova_salud;
+
+-- Tabla productos
+CREATE TABLE productos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10, 2) NOT NULL,
+    stock INT NOT NULL,
+    stock_minimo INT NOT NULL,
+    fecha_vencimiento DATE
+);
+
+-- Tabla ventas
+CREATE TABLE ventas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha DATETIME NOT NULL,
+    total DECIMAL(10, 2) NOT NULL
+);
+
+-- Tabla detalle_venta
+CREATE TABLE detalle_venta (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_venta INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_venta) REFERENCES ventas(id),
+    FOREIGN KEY (id_producto) REFERENCES productos(id)
+);
+
+-- Insertar productos
+INSERT INTO productos (nombre, descripcion, precio, stock, stock_minimo, fecha_vencimiento)
+VALUES
+('Paracetamol 500mg', 'Analgésico y antipirético para el tratamiento de dolor leve o fiebre', 4.50, 100, 10, '2026-12-31'),
+('Ibuprofeno 400mg', 'Antiinflamatorio no esteroideo para el tratamiento de dolor y fiebre', 6.00, 150, 15, '2025-11-30'),
+('Aspirina 100mg', 'Antiinflamatorio, analgésico y antipirético', 3.80, 80, 5, '2027-08-15'),
+('Jarabe para la tos', 'Jarabe que alivia la tos seca y productiva', 8.00, 50, 5, '2025-06-30'),
+('Antibiótico Amoxicilina 500mg', 'Antibiótico de amplio espectro', 12.50, 30, 5, '2026-04-20');
+
+
+-- Insertar ventas
+INSERT INTO ventas (fecha, total)
+VALUES
+('2025-04-28 10:30:00', 20.80),
+('2025-04-28 11:45:00', 13.50),
+('2025-04-28 14:00:00', 9.30);
+
+
+-- Insertar detalles de venta
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario)
+VALUES
+(1, 1, 2, 4.50),  -- Venta 1: 2 unidades de Paracetamol 500mg
+(1, 3, 1, 3.80),  -- Venta 1: 1 unidad de Aspirina 100mg
+(2, 2, 1, 6.00),  -- Venta 2: 1 unidad de Ibuprofeno 400mg
+(2, 4, 1, 8.00),  -- Venta 2: 1 unidad de Jarabe para la tos
+(3, 5, 1, 12.50); -- Venta 3: 1 unidad de Antibiótico Amoxicilina 500mg
+
+

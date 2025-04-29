@@ -5,7 +5,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const ventaRoutes = require("./routes/ventas");
-app.use("/api/ventas", ventaRoutes);
+const ProductoRoutes = require("./routes/productos");
+app.use("/api/productos", ProductoRoutes);
+
+const VentaRoutes = require("./routes/ventas");
+app.use("/api/ventas", VentaRoutes);
+
 
 module.exports = app;
