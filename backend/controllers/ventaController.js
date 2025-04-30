@@ -11,6 +11,7 @@ exports.getAllVentas = (req, res) => {
     const ventasConDetalle = [];
 
     const obtenerDetalles = (index) => {
+      console.log('Detalles de venta para ID:', venta.id);
       if (index === ventas.length) {
         return res.json(ventasConDetalle); // ya se cargaron todos los detalles
       }
