@@ -1,34 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { obtenerProductos, eliminarProducto } from '../../services/productoService';
-
 const ListaProductos = () => {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    cargarProductos();
+    const fetchProductos = async () => {
+      const response = await obtenerProductos();
+      setProductos(response.data);
+    };
+
+    fetchProductos();
   }, []);
 
-  const cargarProductos = async () => {
-    const response = await obtenerProductos();
-    setProductos(response.data);
-  };
-
   const handleEliminar = async (id) => {
-    await eliminarProducto(id);
-    cargarProductos();
+    try {
+      await eliminarProducto(id);
+      const response = await obtenerProductos(); // vuelve a traer la lista actualizada
+      setProductos(response.data);
+
+    } catch (error) {
+      console.error('Error al eliminar producto:', error);
+    }
   };
+  
 
   return (
     <div>
       <h2>Lista de Productos</h2>
-      <ul>
-        {productos.map(producto => (
-          <li key={producto.id}>
-            {producto.nombre} - {producto.stock} unidades
-            <button onClick={() => handleEliminar(producto.id)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Fecha de Vencimiento</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {productos.map((producto) => (
+            <tr key={producto.id}>
+              <td>{producto.nombre}</td>
+              <td>{producto.descripcion}</td>
+              <td>{producto.precio}</td>
+              <td>{producto.stock}</td>
+              <td>{producto.fecha_vencimiento}</td>
+              <td>
+                <button onClick={() => handleEliminar(producto.id)} className="btn btn-danger">Eliminar</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
